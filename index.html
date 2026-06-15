@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>60-Day Plan</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500;600&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #1a1a1a;
+    --paper: #f2efe8;
+    --muscle: #c94a1a;
+    --muscle-light: #e8633a;
+    --beer: #d4a017;
+    --beer-light: #f0c040;
+    --muted: #7a7060;
+    --rule: #d8d0c0;
+    --white: #ffffff;
+    --green: #3a7d44;
+    --phase1: #c94a1a;
+    --phase2: #3a7d44;
+  }
+
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.5;
+  }
+
+  /* HERO */
+  .hero {
+    background: var(--ink);
+    color: var(--white);
+    padding: 48px 24px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 60px,
+      rgba(255,255,255,0.02) 60px,
+      rgba(255,255,255,0.02) 61px
+    );
+  }
+  .hero-eyebrow {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--beer-light);
+    margin-bottom: 16px;
+  }
+  .hero-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(52px, 12vw, 96px);
+    font-weight: 900;
+    line-height: 0.9;
+    text-transform: uppercase;
+    letter-spacing: -1px;
+    margin-bottom: 8px;
+  }
+  .hero-title span { color: var(--muscle); }
+  .hero-sub {
+    font-size: 15px;
+    color: rgba(255,255,255,0.55);
+    margin-top: 16px;
+    max-width: 380px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 32px;
+    font-weight: 900;
+    color: var(--muscle);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 11px;
+    color: rgba(255,255,255,0.45);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 4px;
+  }
+
+  /* PHASE TABS */
+  .phase-nav {
+    display: flex;
+    border-bottom: 2px solid var(--rule);
+    background: var(--white);
+  }
+  .phase-btn {
+    flex: 1;
+    padding: 14px 8px;
+    border: none;
+    background: none;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .phase-btn.active { color: var(--ink); border-bottom-color: var(--muscle); }
+
+  /* CONTENT WRAPPER */
+  .content { max-width: 640px; margin: 0 auto; padding: 0 16px 60px; }
+
+  /* PHASE PANELS */
+  .phase-panel { display: none; padding-top: 28px; }
+  .phase-panel.active { display: block; }
+
+  /* SECTION LABEL */
+  .section-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  /* WEEK SCHEDULE */
+  .week-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    margin-bottom: 28px;
+  }
+  .day-cell {
+    background: var(--white);
+    border-radius: 6px;
+    padding: 8px 4px;
+    text-align: center;
+    border: 1px solid var(--rule);
+  }
+  .day-name {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .day-icon { font-size: 18px; margin-bottom: 4px; }
+  .day-type {
+    font-size: 9px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+  .day-cell.lift { border-top: 3px solid var(--muscle); }
+  .day-cell.lift .day-type { color: var(--muscle); }
+  .day-cell.cardio { border-top: 3px solid var(--green); }
+  .day-cell.cardio .day-type { color: var(--green); }
+  .day-cell.rest { border-top: 3px solid var(--rule); }
+  .day-cell.rest .day-type { color: var(--muted); }
+
+  /* WORKOUT CARDS */
+  .workout-card {
+    background: var(--white);
+    border-radius: 10px;
+    border: 1px solid var(--rule);
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+  .workout-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .workout-header-left { display: flex; align-items: center; gap: 12px; }
+  .workout-day-badge {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background: var(--muscle);
+    color: var(--white);
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+  .workout-day-badge.green { background: var(--green); }
+  .workout-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .workout-meta { font-size: 12px; color: var(--muted); }
+  .chevron {
+    color: var(--muted);
+    font-size: 12px;
+    transition: transform 0.2s;
+  }
+  .workout-card.open .chevron { transform: rotate(180deg); }
+  .workout-body {
+    display: none;
+    padding: 0 16px 16px;
+    border-top: 1px solid var(--rule);
+  }
+  .workout-card.open .workout-body { display: block; }
+
+  /* EXERCISE TABLE */
+  .ex-table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 13px; }
+  .ex-table th {
+    text-align: left;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 6px 8px 6px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .ex-table td { padding: 8px 8px 8px 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  .ex-table tr:last-child td { border-bottom: none; }
+  .ex-name { font-weight: 600; }
+  .ex-note { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .ex-sets { color: var(--muscle); font-weight: 700; font-family: 'Barlow Condensed', sans-serif; font-size: 15px; }
+
+  /* NUTRITION */
+  .nutrition-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .nut-card {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .nut-card.full { grid-column: 1 / -1; }
+  .nut-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 36px;
+    font-weight: 900;
+    line-height: 1;
+    color: var(--ink);
+  }
+  .nut-unit { font-size: 14px; color: var(--muted); font-weight: 400; }
+  .nut-label { font-size: 12px; color: var(--muted); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+  .nut-bar { height: 6px; background: var(--rule); border-radius: 3px; margin-top: 10px; overflow: hidden; }
+  .nut-bar-fill { height: 100%; border-radius: 3px; }
+
+  /* BEER ALLOWANCE */
+  .beer-card {
+    background: var(--ink);
+    color: var(--white);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .beer-emoji { font-size: 36px; }
+  .beer-card-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--beer-light);
+    margin-bottom: 4px;
+  }
+  .beer-card p { font-size: 13px; color: rgba(255,255,255,0.65); line-height: 1.5; }
+
+  /* MEAL PLAN */
+  .meal-row {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 8px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .meal-time {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    min-width: 60px;
+    padding-top: 1px;
+  }
+  .meal-content { flex: 1; }
+  .meal-name { font-weight: 600; font-size: 14px; }
+  .meal-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .meal-cal {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--muscle);
+  }
+
+  /* MILESTONES */
+  .milestone-track {
+    position: relative;
+    padding-left: 28px;
+    margin-bottom: 28px;
+  }
+  .milestone-track::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    background: var(--rule);
+  }
+  .milestone {
+    position: relative;
+    margin-bottom: 20px;
+  }
+  .milestone::before {
+    content: '';
+    position: absolute;
+    left: -24px;
+    top: 5px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--muscle);
+    border: 2px solid var(--paper);
+    box-shadow: 0 0 0 2px var(--muscle);
+  }
+  .milestone-week {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muscle);
+  }
+  .milestone-title { font-weight: 600; font-size: 15px; margin: 2px 0; }
+  .milestone-desc { font-size: 13px; color: var(--muted); }
+
+  /* TIPS */
+  .tip-list { list-style: none; }
+  .tip-list li {
+    display: flex;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--rule);
+    font-size: 14px;
+  }
+  .tip-list li:last-child { border-bottom: none; }
+  .tip-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+
+  /* RESPONSIVE */
+  @media (max-width: 400px) {
+    .week-grid { gap: 3px; }
+    .day-cell { padding: 6px 2px; }
+    .day-icon { font-size: 14px; }
+    .nutrition-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-eyebrow">Ryan's 60-Day Transformation</div>
+  <div class="hero-title">Beer Belly<br><span>to Built</span></div>
+  <p class="hero-sub">Apartment gym only. Budget-friendly. Natty Light included.</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">5'10"</div><div class="stat-label">Height</div></div>
+    <div class="stat"><div class="stat-num">160</div><div class="stat-label">lbs start</div></div>
+    <div class="stat"><div class="stat-num">~2,100</div><div class="stat-label">cal/day</div></div>
+    <div class="stat"><div class="stat-num">4x</div><div class="stat-label">per week</div></div>
+  </div>
+</div>
+
+<nav class="phase-nav">
+  <button class="phase-btn active" onclick="switchTab('workouts')">Workouts</button>
+  <button class="phase-btn" onclick="switchTab('nutrition')">Nutrition</button>
+  <button class="phase-btn" onclick="switchTab('milestones')">Milestones</button>
+  <button class="phase-btn" onclick="switchTab('tips')">Tips</button>
+</nav>
+
+<div class="content">
+
+  <!-- WORKOUTS TAB -->
+  <div class="phase-panel active" id="panel-workouts">
+
+    <div class="section-label">Phase 1 — Weeks 1–4 &nbsp;·&nbsp; Build the Habit</div>
+
+    <div class="week-grid">
+      <div class="day-cell lift"><div class="day-name">Mon</div><div class="day-icon">🏋️</div><div class="day-type">Push</div></div>
+      <div class="day-cell rest"><div class="day-name">Tue</div><div class="day-icon">🚶</div><div class="day-type">Walk</div></div>
+      <div class="day-cell lift"><div class="day-name">Wed</div><div class="day-icon">🏋️</div><div class="day-type">Pull</div></div>
+      <div class="day-cell rest"><div class="day-name">Thu</div><div class="day-icon">🚶</div><div class="day-type">Walk</div></div>
+      <div class="day-cell lift"><div class="day-name">Fri</div><div class="day-icon">🏋️</div><div class="day-type">Legs</div></div>
+      <div class="day-cell cardio"><div class="day-name">Sat</div><div class="day-icon">🏃</div><div class="day-type">Cardio</div></div>
+      <div class="day-cell rest"><div class="day-name">Sun</div><div class="day-icon">😴</div><div class="day-type">Rest</div></div>
+    </div>
+
+    <!-- PUSH -->
+    <div class="workout-card" onclick="toggleCard(this)">
+      <div class="workout-header">
+        <div class="workout-header-left">
+          <span class="workout-day-badge">MON</span>
+          <div>
+            <div class="workout-title">Push Day</div>
+            <div class="workout-meta">Chest · Shoulders · Triceps &nbsp;·&nbsp; ~35 min</div>
+          </div>
+        </div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="workout-body">
+        <table class="ex-table">
+          <thead><tr><th>Exercise</th><th>Sets × Reps</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><div class="ex-name">Dumbbell Bench Press</div><div class="ex-note">Flat or incline bench if available</div></td>
+              <td class="ex-sets">3×10</td>
+            </tr>
+            <tr>
+              <td><div class="ex-name">Dumbbell Shoulder Press</div><div class="ex-note">Seated or standing</div></td>
+              <td class="ex-sets">3×10</td>
+            </tr>
+            <tr>
+              <td><div class="ex-name">Dumbbell Lateral Raises</div><div class="ex-note">Light weight, controlled</div></td>
+              <td class="ex-sets">3×12</td>
+            </tr>
+            <tr>
+              <td><div class="ex-name">Tricep Dips</div><div class="ex-note">Use a bench or sturdy chair</div></td>
+              <td class="ex-sets">3×10</td>
+            </tr>
+            <tr>
+              <td><div class="ex-name">Push-Ups</div><div class="ex-note">Finish with bodyweight, go to near failure</div></td>
+              <td class="ex-sets">2×max</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PULL -->
+    <div class="workout-card" onclick="toggleCard(this)">
+      <div class="workout-header">
+        <div class="workout-header-left">
+          <span class="workout-day-badge">WED</span>
+          <div>
+            <div class="workout-title">Pull Day</div>
+            <div class="workout-meta">Back · Biceps · Rear Delts &nbsp;·&nbsp; ~35 min</div>
+          </div>
+        </div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="workout-body">
+        <table class="ex-table">
+          <thead><tr><th>Exercise</th><th>Sets × Reps</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><div class="ex-name">Dumbbell Rows</div><div class="ex-note">One arm on a bench for support</div></td>
+              <td class="ex-sets">3×10</td>
+            </tr>
+            <tr>
+              <td><div class="ex-name">Lat Pulldown</div><div class="ex-note">Cable machine or resistance band overhead</div></td>
+              <td class="ex-sets">3×10</td>
+            </tr>
+            <tr>
+              <td><div class="ex-name">Face Pulls / Rear Delt Fly</div><div class="ex-note">Cable or dumbbells bent over</div></td>
+              <td class="ex-sets">3×12</td>
+            </tr>
+            <tr>
+              <td><div class="ex-name">Dumbbell Bicep Curls</div><div class="ex-note">Alternating, full range of motion</div></td>
+              <td class="ex-sets">3×12</td>
+            </tr>
+            <tr>
+              <td><div class="ex-name">Hammer Curls</div><div class="ex-note">Neutral grip, targets forearm too</div></td>
+              <td class="ex-sets">2×10</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- LEGS -->
+    <div class="workout-card" onclick="toggleCard(this)">
+      <div class="workout-header">
+        <div class="workout-header-left">
+          <span class="workout-day-badge">FRI</span>
+          <div>
+            <div class="workout-title">Leg Day</div>
+            <div class="workout-meta">Quads · Hamstrings · Glutes &nbsp;·&nbsp; ~35 min</div>
+          </div>
+        </div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="workout-body">
+        <table class="ex-table">
+          <thead><tr><th>Exercise</th><th>Sets × Reps</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><div class="ex-name">Goblet Squats</div><div class="ex-note">Hold one dumbbell at chest — biggest calorie burn</div></td>
+              <td class="ex-sets">4×12</td>
+            </tr>
+            <tr>
+              <td><div class="ex-name">Romanian Deadlift</div><div class="ex-note">Dumbbells, hinge at hips, feel the hamstring stretch</div></td>
+              <td class="ex-sets">3×10</td>
+            </tr>
+            <tr>
+              <td><div class="ex-name">Walking Lunges</div><div class="ex-note">Across the gym floor and back</div></td>
+              <td class="ex-sets">3×12/leg</td>
+            </tr>
+            <tr>
+              <td><div class="ex-name">Leg Press or Step-Ups</div><div class="ex-note">Step-ups on a bench if no machine</div></td>
+              <td class="ex-sets">3×12</td>
+            </tr>
+            <tr>
+              <td><div class="ex-name">Plank</div><div class="ex-note">Core finisher — hold 3×30–45 sec</div></td>
+              <td class="ex-sets">3×40s</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- CARDIO -->
+    <div class="workout-card" onclick="toggleCard(this)">
+      <div class="workout-header">
+        <div class="workout-header-left">
+          <span class="workout-day-badge green">SAT</span>
+          <div>
+            <div class="workout-title">Cardio</div>
+            <div class="workout-meta">Belly fat burner &nbsp;·&nbsp; 20–30 min</div>
+          </div>
+        </div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="workout-body">
+        <table class="ex-table">
+          <thead><tr><th>Option</th><th>Duration</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><div class="ex-name">Treadmill Walk (incline 8–12)</div><div class="ex-note">Best belly fat burn — low impact, sustainable</div></td>
+              <td class="ex-sets">30 min</td>
+            </tr>
+            <tr>
+              <td><div class="ex-name">Stationary Bike (moderate)</div><div class="ex-note">Good if knees are a concern</div></td>
+              <td class="ex-sets">25 min</td>
+            </tr>
+            <tr>
+              <td><div class="ex-name">Elliptical</div><div class="ex-note">Full body, easy on joints</div></td>
+              <td class="ex-sets">25 min</td>
+            </tr>
+            <tr>
+              <td><div class="ex-name">Outdoor Walk/Jog</div><div class="ex-note">Free and underrated — 10 min walk + 20 min jog</div></td>
+              <td class="ex-sets">30 min</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section-label" style="margin-top: 28px;">Phase 2 — Weeks 5–8 &nbsp;·&nbsp; Turn Up the Heat</div>
+    <div class="workout-card">
+      <div class="workout-header" onclick="toggleCard(this)">
+        <div class="workout-header-left">
+          <span class="workout-day-badge">UPGRADE</span>
+          <div>
+            <div class="workout-title">What Changes in Week 5</div>
+            <div class="workout-meta">Same schedule, harder workouts</div>
+          </div>
+        </div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="workout-body">
+        <table class="ex-table">
+          <thead><tr><th>Change</th><th>How</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><div class="ex-name">Add weight to every lift</div><div class="ex-note">If you hit 3×10 easily, go up 5 lbs</div></td>
+              <td class="ex-sets">+5 lbs</td>
+            </tr>
+            <tr>
+              <td><div class="ex-name">Drop rest between sets</div><div class="ex-note">From 90 sec down to 60 sec</div></td>
+              <td class="ex-sets">60s rest</td>
+            </tr>
+            <tr>
+              <td><div class="ex-name">Add a 4th set to big lifts</div><div class="ex-note">Squats, bench, rows only</div></td>
+              <td class="ex-sets">4 sets</td>
+            </tr>
+            <tr>
+              <td><div class="ex-name">Add Tuesday light cardio</div><div class="ex-note">15 min incline walk — replaces casual walk</div></td>
+              <td class="ex-sets">5x/week</td>
+            </tr>
+            <tr>
+              <td><div class="ex-name">Core circuit added</div><div class="ex-note">Plank + leg raises + bicycle crunches after every lift</div></td>
+              <td class="ex-sets">3 rounds</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- NUTRITION TAB -->
+  <div class="phase-panel" id="panel-nutrition">
+
+    <div class="section-label">Daily Targets</div>
+    <div class="nutrition-grid">
+      <div class="nut-card">
+        <div class="nut-num">2,100 <span class="nut-unit">cal</span></div>
+        <div class="nut-label">Daily calories</div>
+        <div class="nut-bar"><div class="nut-bar-fill" style="width:75%; background: var(--muscle);"></div></div>
+      </div>
+      <div class="nut-card">
+        <div class="nut-num">160 <span class="nut-unit">g</span></div>
+        <div class="nut-label">Protein (1g per lb)</div>
+        <div class="nut-bar"><div class="nut-bar-fill" style="width:100%; background: var(--green);"></div></div>
+      </div>
+      <div class="nut-card">
+        <div class="nut-num">200 <span class="nut-unit">g</span></div>
+        <div class="nut-label">Carbs</div>
+        <div class="nut-bar"><div class="nut-bar-fill" style="width:60%; background: var(--beer);"></div></div>
+      </div>
+      <div class="nut-card">
+        <div class="nut-num">65 <span class="nut-unit">g</span></div>
+        <div class="nut-label">Fat</div>
+        <div class="nut-bar"><div class="nut-bar-fill" style="width:45%; background: var(--muted);"></div></div>
+      </div>
+      <div class="nut-card full">
+        <div style="font-size:13px; color: var(--muted); line-height: 1.6;">
+          Your maintenance is roughly <strong>2,500 cal/day</strong> at your stats and activity level. A 400-cal daily deficit = ~0.8 lb lost per week — slow enough to preserve muscle while you build it. Don't go lower or you'll stall your gains.
+        </div>
+      </div>
+    </div>
+
+    <div class="section-label">🍺 Beer Allowance</div>
+    <div class="beer-card">
+      <div class="beer-emoji">🍺</div>
+      <div>
+        <div class="beer-card-title">6 Natty Lights per week</div>
+        <p>That's 570 calories. Keep it to weekends — ideally Fri/Sat nights. Drink a glass of water between each beer. You'll feel fine Sunday and stay on track Monday.</p>
+      </div>
+    </div>
+
+    <div class="section-label">Sample Day of Eating (~$5–7 total)</div>
+
+    <div class="meal-row">
+      <div class="meal-time">7am</div>
+      <div class="meal-content">
+        <div class="meal-name">Eggs + Oats</div>
+        <div class="meal-desc">3 scrambled eggs + 1 cup oats with banana. Cheap, filling, high protein.</div>
+      </div>
+      <div class="meal-cal">~450</div>
+    </div>
+    <div class="meal-row">
+      <div class="meal-time">12pm</div>
+      <div class="meal-content">
+        <div class="meal-name">Chicken Rice Bowl</div>
+        <div class="meal-desc">6oz chicken breast + 1 cup white rice + frozen veggies. Meal prep this in bulk.</div>
+      </div>
+      <div class="meal-cal">~550</div>
+    </div>
+    <div class="meal-row">
+      <div class="meal-time">3pm</div>
+      <div class="meal-content">
+        <div class="meal-name">Greek Yogurt + Fruit</div>
+        <div class="meal-desc">Plain greek yogurt (protein packed) + whatever fruit is cheap this week.</div>
+      </div>
+      <div class="meal-cal">~200</div>
+    </div>
+    <div class="meal-row">
+      <div class="meal-time">7pm</div>
+      <div class="meal-content">
+        <div class="meal-name">Ground Beef + Sweet Potato</div>
+        <div class="meal-desc">93% lean ground beef + baked sweet potato + salsa. Under $4 a plate.</div>
+      </div>
+      <div class="meal-cal">~600</div>
+    </div>
+    <div class="meal-row">
+      <div class="meal-time">9pm</div>
+      <div class="meal-content">
+        <div class="meal-name">Protein Shake or Cottage Cheese</div>
+        <div class="meal-desc">Cottage cheese is cheaper than protein powder and has more protein per dollar.</div>
+      </div>
+      <div class="meal-cal">~200</div>
+    </div>
+
+    <div style="background: var(--white); border: 1px solid var(--rule); border-radius: 10px; padding: 16px; margin-top: 12px;">
+      <div class="section-label" style="margin-bottom: 10px;">Cheapest Protein Sources</div>
+      <ul class="tip-list">
+        <li><span class="tip-icon">🥚</span> <span><strong>Eggs</strong> — ~$0.20/egg, 6g protein each. Best value on the planet.</span></li>
+        <li><span class="tip-icon">🍗</span> <span><strong>Chicken breast</strong> — Buy a 5lb bag at Walmart, ~$2.50/lb.</span></li>
+        <li><span class="tip-icon">🥩</span> <span><strong>93% lean ground beef</strong> — $4–5/lb, ~25g protein per serving.</span></li>
+        <li><span class="tip-icon">🫙</span> <span><strong>Canned tuna</strong> — $1/can, 25g protein. Add to rice or eat straight.</span></li>
+        <li><span class="tip-icon">🧀</span> <span><strong>Cottage cheese</strong> — $3–4 for a big container, 25g protein per cup.</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- MILESTONES TAB -->
+  <div class="phase-panel" id="panel-milestones">
+    <div class="section-label">What to Expect Week by Week</div>
+    <div class="milestone-track">
+      <div class="milestone">
+        <div class="milestone-week">Week 1–2</div>
+        <div class="milestone-title">You'll feel sore. That's good.</div>
+        <div class="milestone-desc">Your muscles are waking up. Scale may not move yet — that's normal. Focus on showing up, not results.</div>
+      </div>
+      <div class="milestone">
+        <div class="milestone-week">Week 3</div>
+        <div class="milestone-title">Soreness fades. Routine locks in.</div>
+        <div class="milestone-desc">You'll stop dreading the gym and start expecting it. This is where most people quit — don't.</div>
+      </div>
+      <div class="milestone">
+        <div class="milestone-week">Week 4</div>
+        <div class="milestone-title">First visible change.</div>
+        <div class="milestone-desc">Waistline starts to tighten slightly. Shirts may fit a little different. Energy noticeably higher.</div>
+      </div>
+      <div class="milestone">
+        <div class="milestone-week">Week 5</div>
+        <div class="milestone-title">Phase 2 kicks in. Add weight.</div>
+        <div class="milestone-desc">Increase every lift by 5 lbs. You're stronger than you were — prove it. Belly fat visibly reducing.</div>
+      </div>
+      <div class="milestone">
+        <div class="milestone-week">Week 6</div>
+        <div class="milestone-title">Other people start to notice.</div>
+        <div class="milestone-desc">You'll hear "you look different" before you see it yourself. Shoulder and arm definition emerges.</div>
+      </div>
+      <div class="milestone">
+        <div class="milestone-week">Week 7</div>
+        <div class="milestone-title">Momentum is real.</div>
+        <div class="milestone-desc">Diet feels automatic. Gym is a non-negotiable. Body composition is measurably different.</div>
+      </div>
+      <div class="milestone">
+        <div class="milestone-week">Week 8</div>
+        <div class="milestone-title">Day 60. Take the photo.</div>
+        <div class="milestone-desc">You should be down 5–8 lbs of fat and noticeably more muscular. The real goal: you built a habit that lasts beyond 60 days.</div>
+      </div>
+    </div>
+
+    <div class="section-label">Realistic 60-Day Results</div>
+    <div class="nutrition-grid">
+      <div class="nut-card">
+        <div class="nut-num">5–8 <span class="nut-unit">lbs</span></div>
+        <div class="nut-label">Fat lost</div>
+      </div>
+      <div class="nut-card">
+        <div class="nut-num">2–4 <span class="nut-unit">lbs</span></div>
+        <div class="nut-label">Muscle gained</div>
+      </div>
+      <div class="nut-card">
+        <div class="nut-num">1–2 <span class="nut-unit">in</span></div>
+        <div class="nut-label">Off the waist</div>
+      </div>
+      <div class="nut-card">
+        <div class="nut-num">+20 <span class="nut-unit">%</span></div>
+        <div class="nut-label">Strength gains</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TIPS TAB -->
+  <div class="phase-panel" id="panel-tips">
+    <div class="section-label">Make This Stick</div>
+    <ul class="tip-list">
+      <li><span class="tip-icon">📸</span> <span><strong>Take a photo today.</strong> Front and side. You'll want this at day 60 — trust the process.</span></li>
+      <li><span class="tip-icon">⚖️</span> <span><strong>Weigh yourself once a week</strong>, same morning, same time. Daily weigh-ins lie — water weight fluctuates 3–5 lbs day to day.</span></li>
+      <li><span class="tip-icon">💧</span> <span><strong>Drink a gallon of water a day.</strong> Seriously. Cuts appetite, helps you lift more, flushes belly bloat.</span></li>
+      <li><span class="tip-icon">😴</span> <span><strong>Sleep 7–8 hours.</strong> Muscle is built while you sleep, not while you lift. Poor sleep tanks your progress more than a missed workout.</span></li>
+      <li><span class="tip-icon">🥩</span> <span><strong>Hit your protein every single day.</strong> You can miss cardio. You can miss a workout. Never miss your protein target — it's the #1 factor in keeping muscle.</span></li>
+      <li><span class="tip-icon">🍺</span> <span><strong>Beer on weekends, not weekdays.</strong> Alcohol spikes cortisol which stores belly fat. Keep it to Fri/Sat and you're fine.</span></li>
+      <li><span class="tip-icon">🍟</span> <span><strong>One cheat meal a week is fine.</strong> One cheat day will undo progress. Eat the burger — skip the whole Saturday binge.</span></li>
+      <li><span class="tip-icon">🏋️</span> <span><strong>Progressive overload is the secret.</strong> Add 5 lbs to every lift every 1–2 weeks. That's it. That's the whole muscle-building formula.</span></li>
+      <li><span class="tip-icon">⏰</span> <span><strong>Go at the same time every day.</strong> Make it a calendar event. The gym you almost skip always feels best after.</span></li>
+      <li><span class="tip-icon">🎵</span> <span><strong>Build a hype playlist.</strong> Sounds dumb, works immediately. 15% more output on average with music you're pumped about.</span></li>
+    </ul>
+  </div>
+
+</div>
+
+<script>
+  function switchTab(tab) {
+    document.querySelectorAll('.phase-btn').forEach((b, i) => {
+      b.classList.toggle('active', ['workouts','nutrition','milestones','tips'][i] === tab);
+    });
+    document.querySelectorAll('.phase-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('panel-' + tab).classList.add('active');
+  }
+
+  function toggleCard(card) {
+    card.classList.toggle('open');
+  }
+</script>
+</body>
+</html>
